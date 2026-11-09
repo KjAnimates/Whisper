@@ -44,7 +44,17 @@ const (
 )
 const (
 	WORD_UNINITIALIZED = -1
+)  
+
+type Token int
+const (
+	TOK_WORD Token = iota
 )
+type Symbol struct {
+	Type Token
+	Content string
+}
+
 type Word struct {
 	Start int
 	End   int
@@ -64,10 +74,10 @@ func GetCharacterTypeOfByte(b byte) CharType {
 	}
 }
 func Substring(str string, start, end int) string {
-   return strings.TrimSpace(str[start:end])
+  return strings.TrimSpace(str[start:end])
 }
 
-func Tokenize(source string) {
+func Tokenize(source string) []string {
 	var symbols []Word
 	quote := false
 	word_type := CHAR_LETTER
@@ -116,6 +126,7 @@ func Tokenize(source string) {
 	for i := range len(tokens) {
 		fmt.Printf("tokens[i]: %v\n", tokens[i])
 	}
+	return tokens
 }
 
 // func tokenize(source string) {
