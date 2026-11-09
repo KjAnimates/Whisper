@@ -42,12 +42,18 @@ const (
 	CHAR_WHITESPACE
 	CHAR_SPECIAL
 )
+const (
+	WORD_UNINITIALIZED = -1
+)
 type Word struct {
 	Start int
 	End   int
 	Type  CharType
 }
 
+func WordInitialized(word Word) bool {
+	return word.Start != -1
+}
 func GetCharacterTypeOfByte(b byte) CharType {
 	if is_alpha(b) { 
 		return CHAR_LETTER 
@@ -63,13 +69,14 @@ func Substring(str string, start, end int) string {
 
 func Tokenize(source string) {
 	var symbols []Word
+	quote := false
 	word_type := CHAR_LETTER
 	word_start := 0
 	word_end := 0
 	for i := range len(source) {
 		char := source[i]
 		char_type := GetCharacterTypeOfByte(char)
-		if char_type != word_type {
+		if !quote && char_type != word_type || word_type == CHAR_SPECIAL {
 			word_end = i
 			word := Word{
 				Start: word_start,
@@ -80,6 +87,21 @@ func Tokenize(source string) {
 			word_start = i
 			word_type = GetCharacterTypeOfByte(char)
 		}
+		if char == '"' {
+			quote = !quote
+			if quote {
+				word_start = i
+			} else {
+				word_end = i
+				word := Word{
+					Start: word_start,
+					End: word_end,
+					Type: word_type,
+				}
+				symbols = append(symbols, word)
+				word_start = i
+			}
+		} 
 	}
 	symbols = append(symbols, Word{Start: word_end, End: len(source), Type: CHAR_LETTER})
 
