@@ -1,10 +1,12 @@
 package main
 
 import (
+	"KjAnimates/whisper/src"
 	"bufio"
+	"fmt"
 	"log"
 	"os"
-	"KjAnimates/whisper/src"
+	"github.com/joho/godotenv"
 )
 
 func ReadFileByLines(source_file string) []string {
@@ -26,7 +28,15 @@ func ReadFileByLines(source_file string) []string {
 }
 
 func main() {
-	file := "/home/kaden/Programming/Go/whisper/main.ws"
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Cannot read Environment file. Exiting.")
+		return
+	}
+
+	file := os.Getenv("TEST_FILE")
+	fmt.Printf("file: %v\n", file)
+
 	lines := ReadFileByLines(file)
 
 	for i := range len(lines) {
