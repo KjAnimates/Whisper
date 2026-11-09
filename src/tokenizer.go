@@ -1,4 +1,4 @@
-package main
+package src
 
 import (
 	"fmt"
@@ -6,6 +6,8 @@ import (
 	"unicode"
 )
 
+var delims []byte = []byte{'(', ')', '+', '-', '*', '\'', '"', ' ', '&'}
+var digits []byte = []byte{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'}
 func is_digit(char byte) bool {
 	for i := range len(digits) {
 		digit := digits[i]
